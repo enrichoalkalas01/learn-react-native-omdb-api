@@ -9,8 +9,11 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import { useSelector } from 'react-redux'
 
 export default MainLayouts = ({ children, navigation }) => {
+    const store = useSelector(state => state)
+    console.log(store)
     return(
         <>
             <SafeAreaView>
