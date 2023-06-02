@@ -13,7 +13,7 @@ export default MainHome = ({ navigation }) => {
                 <View>
                     <Text style={{ color: "#e6e6e6" }}>Home Here</Text>
                 </View>
-                <TouchableOpacity onPress={ () => { console.log(navigation.navigate('DetailMovie')) }}>
+                <TouchableOpacity>
                     <Text style={{ color: "#e6e6e6" }}>Click Here</Text>
                 </TouchableOpacity>
             </MainLayouts>

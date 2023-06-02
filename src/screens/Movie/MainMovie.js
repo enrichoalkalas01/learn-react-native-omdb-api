@@ -13,7 +13,8 @@ import Axios from 'axios'
 import MainLayouts from "../../layouts/MainLayouts"
 import SearchComponent from "../../components/movie/SearchComponent"
 
-export default MainMovie = ({ navigation }) => {
+export default MainMovie = (props) => {
+    const navigation = props.navigation
     const [movie, setMovie] = useState([])
 
     useEffect(() => {
@@ -69,10 +70,9 @@ export default MainMovie = ({ navigation }) => {
                             horizontal={ true }
                             renderItem={ ({ item }) => {
                                 return(
-                                    <TouchableOpacity style={{
-                                        // width: '100%',
-                                        // flexBasis: '50%',
-                                    }}>
+                                    <TouchableOpacity
+                                        onPress={ () => navigation.navigate('DetailMovie', { id: item.imdbID }) }
+                                    >
                                         <View
                                             style={{
                                                 width: 200,
