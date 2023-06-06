@@ -12,8 +12,8 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { useSelector } from 'react-redux'
 
 export default MainLayouts = ({ children, navigation }) => {
-    const store = useSelector(state => state)
-    console.log(store)
+    // const store = useSelector(state => state)
+    // console.log(store)
     return(
         <>
             <SafeAreaView>

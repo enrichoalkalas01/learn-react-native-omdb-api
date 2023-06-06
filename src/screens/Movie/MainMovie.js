@@ -8,22 +8,23 @@ import {
     ScrollView,
 } from "react-native"
 import { useState, useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import Axios from 'axios'
+
+import { setMovieList, setMovieDetailId } from "../../redux/reducers/Movie"
 
 import MainLayouts from "../../layouts/MainLayouts"
 import SearchComponent from "../../components/movie/SearchComponent"
 
 export default MainMovie = (props) => {
+    const store = useSelector(state => state)
+    const dispatch = useDispatch()
     const navigation = props.navigation
     const [movie, setMovie] = useState([])
 
     useEffect(() => {
-        getMovieData()
-    }, [])
-
-    useEffect(() => {
-        console.log(movie)
-    }, [movie])
+        // console.log(movie)
+    }, [store])
 
     const getMovieData = async (query = "marvel", page = 1) => {
         let config = {
@@ -36,7 +37,7 @@ export default MainMovie = (props) => {
 
         try {
             let getData = await Axios(config)
-            setMovie(getData.data.Search)
+            dispatch(setMovieList(getData.data.Search))
         } catch (error) {
             console.log(error)
         }
@@ -66,12 +67,15 @@ export default MainMovie = (props) => {
                                 // flexWrap: 'wrap',
                                 // flexGrow: 0,
                             }}
-                            data={ movie }
+                            data={ store.Movie.movie_list }
                             horizontal={ true }
                             renderItem={ ({ item }) => {
                                 return(
                                     <TouchableOpacity
-                                        onPress={ () => navigation.navigate('DetailMovie', { id: item.imdbID }) }
+                                        onPress={ () => {
+                                            dispatch(setMovieDetailId(item.imdbID))
+                                            navigation.navigate('DetailMovie')
+                                        }}
                                     >
                                         <View
                                             style={{

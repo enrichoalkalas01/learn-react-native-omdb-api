@@ -11,22 +11,25 @@ import Axios from 'axios'
 
 import MainLayouts from '../../layouts/MainLayouts'
 import { useEffect, useState } from 'react'
+import { useRoute, useNavigation } from '@react-navigation/native'
+import { useDispatch, useSelector } from 'react-redux'
+import { setMovieDetailId } from '../../redux/reducers/Movie'
 
 export default MainDetailMovie = (props) => {
-    const navigation = props.navigation
-    const routes = props.route
+    const store = useSelector(state => state.Movie)
+    const navigation = useNavigation()
+    const dispatch = useDispatch()
+    const routes = useRoute();
     const [bookmark, setBookmark] = useState(false)
     const [love, setLove] = useState(false)
     const [movieData, setMovieData] = useState(null)
 
     useEffect(() => {
-        // Go Back if params dont have id movie
-        if ( !routes.params || !routes.params.id ) navigation.navigate('Movie')
-        else { getDetailMovieData() }
+        
     }, [])
 
     useEffect(() => {
-        console.log(movieData)
+        if ( !movieData ) getDetailMovieData()
     }, [bookmark, love, movieData])
 
     const clickBookmarkMovie = () => setBookmark(!bookmark)
@@ -34,7 +37,7 @@ export default MainDetailMovie = (props) => {
 
     const getDetailMovieData = async () => {
         let config = {
-            url: `http://www.omdbapi.com/?apikey=58ed57ce&i=${ routes.params.id }`,
+            url: `http://www.omdbapi.com/?apikey=58ed57ce&i=${ store.movie_detail_id }`,
             method: 'get',
             headers: {
                 'Content-Type': 'application/json'
@@ -43,7 +46,7 @@ export default MainDetailMovie = (props) => {
 
         try {
             let getData = await Axios(config)
-            // setMovieData(getData.data)
+            setMovieData(getData.data)
         } catch (error) {
             console.log(error)
         }
@@ -63,7 +66,7 @@ export default MainDetailMovie = (props) => {
                         }}
                     >
                         <ImageBackground
-                            source={ !movieData ? require('../../../assets/images/menu-bg.jpeg') : { uri: movieData.Poster } }
+                            source={ !movieData ? require('../../../assets/images/menu-bg.jpeg') : { uri: movieData?.Poster } }
                             resizeMode='cover'
                             style={{
                                 height: '100%',
@@ -86,7 +89,13 @@ export default MainDetailMovie = (props) => {
                                         paddingLeft: 25,
                                     }}
                                 >
-                                    <TouchableOpacity onPress={ () => navigation.navigate('Movie') }>
+                                    <TouchableOpacity 
+                                        onPress={ () => {
+                                            setMovieData({})
+                                            dispatch(setMovieDetailId(''))
+                                            navigation.navigate('Movie')
+                                        }
+                                    }>
                                         <FontAwesome5
                                             name="arrow-left"
                                             size={ 20 }
@@ -95,7 +104,7 @@ export default MainDetailMovie = (props) => {
                                         />
                                     </TouchableOpacity>
                                 </View>
-                                <View
+                                <View   
                                     style={{
                                         width: '100%',
                                         flexBasis: '50%',
@@ -129,8 +138,55 @@ export default MainDetailMovie = (props) => {
                             </View>
                         </ImageBackground>
                     </View>
-                    <View>
-                        <Text>Tester Here For Detail Movie</Text>
+                    <View
+                        style={{
+                            paddingVertical: 20,
+                            paddingHorizontal: 20,
+                        }}
+                    >
+                        <View
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                            }}
+                        >
+                            <View
+                                style={{
+                                    width: '70%',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Text style={{
+                                    color: '#fff',
+                                    fontSize: 24
+                                }}>{ movieData?.Title }</Text>
+                            </View>
+                            <View
+                                style={{
+                                    width: '30%',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'flex-end',
+                                }}
+                            >
+                                <View>
+                                    <Text style={{
+                                        color: "#fff",
+                                        fontSize: 16
+                                    }}>{ movieData?.Ratings[0].Value }</Text>
+                                </View>
+                                <View>
+                                    <FontAwesome5
+                                        name="star"
+                                        size={ 16 }
+                                        color={ 'yellow' }
+                                        style={{ marginLeft: 10 }}
+                                        solid={ true }
+                                    />
+                                </View>
+                            </View>
+                        </View>
                     </View>
                 </View>
             </SafeAreaView>
