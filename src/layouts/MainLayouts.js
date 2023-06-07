@@ -4,9 +4,11 @@ import {
     TouchableOpacity,
     ImageBackground,
     Image,
+    SafeAreaView,
+    ScrollView
 } from 'react-native'
 
-import { SafeAreaView } from 'react-native-safe-area-context'
+// import { SafeAreaView } from 'react-native-safe-area-context'
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import { useSelector } from 'react-redux'
@@ -16,7 +18,7 @@ export default MainLayouts = ({ children, navigation }) => {
     // console.log(store)
     return(
         <>
-            <SafeAreaView>
+            
                 <View style={{
                     width: '100%',
                     height: '100%',
@@ -26,7 +28,7 @@ export default MainLayouts = ({ children, navigation }) => {
                     <View
                         style={{
                             width: '100%',
-                            paddingVertical: 20,
+                            paddingVertical: 50,
                             paddingHorizontal: 25,
                             flexDirection: 'row',
                             alignItems: 'center',
@@ -67,10 +69,14 @@ export default MainLayouts = ({ children, navigation }) => {
                         </View>
                     </View>
                     <View style={{ paddingVertical: 10, paddingHorizontal: 25 }}>
-                        { children }
+                        <SafeAreaView style={{ paddingBottom: 125 }}>
+                            <ScrollView>
+                                { children }
+                            </ScrollView>
+                        </SafeAreaView>
                     </View>
                 </View>
-            </SafeAreaView>
+            
         </>
     )
 }
